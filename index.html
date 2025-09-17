@@ -3,19 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catch the mouse Game</title>
+    <title>Interactive Pattern Game</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    
 </head>
 <body>
-    <h1>Catch the Mouse Game</h1>
-    <div id="pattern-display">
-        <strong>Task: </strong> Notice the pattern in which the mouse appears <br>and predict where the mole is going to appear next!
+    <div id="start-screen">
+        <div class="start-modal">
+            <h2>Welcome to the Pattern Game!</h2>
+            <p>Please enter your name to begin:</p>
+            <input type="text" id="player-name-input" placeholder="Player Name" maxlength="15">
+            <button id="play-game-btn" class="primary">Play Game</button>
+        </div>
     </div>
-    <div id="grids-wrapper" class="grids-wrapper">
-        <div id="game-area" class="grid"></div>
-        <div id="solution-area" class="grids" style="display:none;"></div>
+
+    <h1>🐹 Interactive Pattern Game</h1>
+
+    <div class="stats-bar">
+        <div id="score">Score: 0</div>
+        <div id="high-score">High Score: 0</div>
+        <div id="timer">Time: 30</div>
+        <div>
+            <label for="level-select">Level:</label>
+            <select id="level-select" class="level-select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
     </div>
-    <div id="score">Score: 0</div>
+
+    <div class="game-info">
+        <div class="instructions">
+            <h2 id="level-title">Level 1: Mouse Zigzag</h2>
+            <p id="level-description">The mouse visits holes in a zigzag pattern. Can you continue it?</p>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div>
+            <div id="game-area"></div>
+        </div>
+        <div id="solution-area"></div>
+    </div>
+
+    <div id="simple-toast">
+        This is a toast message!
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
