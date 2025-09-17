@@ -1,128 +1,346 @@
+:root {
+    --primary-grad-start: #fffbf3;
+    --primary-grad-end: #ffeddd;
+    --action-grad-start: #FF6B6B;
+    --action-grad-end: #4ECDC4;
+    --text-light: #333333;
+    --text-dark: #ffffff;
+    --gold: #FFD700;
+    --success: #32CD32;
+    --fail: #FF6B6B;
+}
+
 body {
-    background-color: #f0f8ff;
     font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary-grad-start) 0%, var(--primary-grad-end) 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-light);
+    overflow-x: hidden;
+}
+
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+.start-modal {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.start-modal h2 {
+    margin-top: 0;
+    font-size: 2rem;
+    /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
+}
+
+#player-name-input {
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 2px solid var(--action-grad-end);
+    font-size: 1rem;
+    margin: 15px 0;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-dark);
 }
 
 h1 {
-    color: #ff6347;
+    /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
+    margin-bottom: 10px;
 }
 
-#game-area {
-    justify-content: center;
-    margin: 20px;
-}
-
-.grids-wrapper {
+.stats-bar {
     display: flex;
-    gap: 40px;
+    justify-content: space-around;
     align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+    background: rgba(255, 123, 0, 0.2);
+    padding: 10px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+#score,
+#high-score,
+#timer {
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+#timer {
+    color: var(--text-light);
+}
+
+.stats-bar>div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stats-bar label {
+    color: var(--text-light);
+    opacity: 0.9;
+}
+
+.level-select {
+    margin-left: 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.85);
+    color: #333;
+}
+
+.game-container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
-.grid {
+#game-area,
+#solution-area {
     display: grid;
-    grid-template-columns: repeat(5, 40px);
-    grid-template-rows: repeat(5, 40px);
-    gap: 6px;
-    margin-bottom: 20px;
-    vertical-align: top;
+    grid-template-columns: repeat(5, 70px);
+    grid-gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.grid-6 {
+    grid-template-columns: repeat(6, 60px) !important;
+}
+
+#solution-area {
+    display: none;
 }
 
 .hole {
-    width: 40px;
-    height: 40px;
-    background: #3cb371; /* green */
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle, #8B4513 0%, #654321 70%, #3E2723 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    color: #fff;
     cursor: pointer;
+    font-size: 2rem;
+    transition: all 0.2s ease;
+    border: 4px solid transparent;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
-    transition: background 0.2s, box-shadow 0.2s;
     user-select: none;
-    border: 2px solid #fff;
-    box-shadow: none;
 }
 
 .hole:hover {
-    background-color: #ffe4e1;
+    transform: scale(1.05);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.hole.up {
-    background: #cfc;
+.hole.pop {
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0.5);
+    }
+
+    70% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .hole.brown {
-    background: #8B4513 !important; /* brown */
+    background: radial-gradient(circle, #D2691E 0%, #A0522D 70%, #8B4513 100%);
+}
+
+.hole.white {
+    background: radial-gradient(circle, #ffffff 0%, #e6e6e6 70%, #cccccc 100%);
+    color: #333;
 }
 
 .hole.wrong-inner {
-    box-shadow: inset 0 0 0 4px #ff6347 !important; /* bright yellow */
+    border-color: var(--gold);
+    box-shadow: inset 0 0 0 4px var(--fail);
 }
 
 .hole.missed-inner {
-    box-shadow: inset 0 0 0 4px #ff4500 !important; /* same brown as visited */
+    border-color: var(--success);
+    box-shadow: inset 0 0 0 4px #90EE90;
 }
 
-.mole {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
+.hole.victory-animation {
+    animation: catchMouse 0.6s ease-in-out;
 }
 
-.mole.visible {
-    display: block;
+@keyframes catchMouse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    75% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
-.score {
-    font-size: 24px;
-    color: #4682b4;
-}
-
-.button {
-    padding: 10px 20px;
-    background-color: #ff6347;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.button:hover {
-    background-color: #ff4500;
-}
-
-.primary {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 5px;
+button.primary {
+    /* background: linear-gradient(45deg, var(--action-grad-start), var(--action-grad-end)); */
+    color: var(--text-light);
+    border: chocolate 2px solid;
+    padding: 12px 24px;
+    border-radius: 25px;
     font-size: 1rem;
-    margin: 8px 8px 0 0;
+    font-weight: bold;
     cursor: pointer;
+    margin: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.primary:disabled {
-    background: #aaa;
+button.primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button.primary:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 .dynamic-ui {
-    margin-top: 10px;
+    margin: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    text-align: center;
 }
 
-.hole-number {
-    position: absolute;
-    bottom: 3px;
-    right: 6px;
-    font-size: 0.7rem;
-    color: #fff;
-    pointer-events: none;
+.animal-toggle {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.animal-toggle .toggle-btn {
+    padding: 8px 14px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.animal-toggle .toggle-btn.active {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) inset;
+}
+
+.game-info {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
+.instructions {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+#simple-toast {
+    height: 200px;
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-flow: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: none;
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    background: #fff;
+    color: var(--text-light);
+    padding: 16px 32px;
+    border-radius: 24px;
+    font-size: 1.2rem;
+    z-index: 9999;
+}
+
+#simple-toast img {
+    border-radius: 12px;
+    background: #fff;
+    height: 80%;
+    width: auto;
+    mix-blend-mode: hard-light;
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #game-area,
+    #solution-area {
+        grid-template-columns: repeat(5, 55px);
+    }
+
+    .hole {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+
+    .stats-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
 }
